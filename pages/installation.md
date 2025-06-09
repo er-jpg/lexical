@@ -80,6 +80,7 @@ source code is `/my/home/projects/lexical`.
 7. [Vim + Vim-LSP](#vim--vim-lsp)
 8. [Helix](#helix)
 9. [Sublime Text](#sublime-text)
+10. [Zed](#zed)
 
 ### Vanilla Emacs with lsp-mode
 The emacs instructions assume you're using `use-package`, which you
@@ -322,3 +323,49 @@ You'll need to add a key called `"clients"` in the top-level `LSP.sublime-settin
 _note: you can name elixir-lexical whatever you like, it's just for your own identification_
 
 Upon saving the configuration, LSP-Sublime should enable the new `elixir-lexical` LSP server. Go into an Elixir file and you should now see `elixir-lexical` in the lower left of the status bar. If not, invoke the command palette and select `LSP: Enable Language Server Globally/In Project` and it should run.
+
+### Zed
+
+Ensure that you have Lexical [installed from source](https://github.com/lexical-lsp/lexical/blob/main/pages/installation.md#prerequisites).
+
+Add lexical as the default language server to Zed configuration via the command `cmd + ,` or by editing the `~/.config/zed/settings.json` file with:
+
+```json
+  "languages": {
+    "Elixir": {
+      "language_servers": ["lexical"],
+      "format_on_save": {
+        "external": {
+          "command": "mix",
+          "arguments": ["format", "--stdin-filename", "{buffer_path}", "-"]
+        }
+      }
+    }
+  }
+```
+
+Then add the path to the lsp in the same file:
+
+```json
+  "lsp": {
+    "elixir-ls": {
+      "binary": {
+        "path": "/my/home/projects/_build/dev/package/lexical/bin/start_lexical.sh"
+      }
+    }
+  }
+```
+
+
+It's also possible to add support to `heex` and `html.heex` files via:
+
+```json
+  "languages": {
+    "HEEX": {
+      "language_servers": ["elixir-ls"]
+    },
+    "HTML+EEX": {
+      "language_servers": ["elixir-ls"]
+    }
+  }
+```
